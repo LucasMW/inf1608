@@ -18,10 +18,10 @@ double bisection(double a, double b, int p, double (*f) (double x, void* data), 
 		fB=f(b,data);
 		c=(a+b)/2.0;
 		fC=f(c,data);
-		printf("%.6lf c:%.6lf\n",fC,c);
+		//printf("%.6lf c:%.6lf\n",fC,c);
 		if(fC==0 || fabs(b-a) < tolerance)
 		{ //found
-			printf("found \n");
+			//printf("found \n");
 			return c;
 		}
 		if(fC*fA>0)
@@ -33,14 +33,24 @@ double bisection(double a, double b, int p, double (*f) (double x, void* data), 
 
 
 }
-double sqrtNet(double x,void* data)
+double sqrtNet(double x,double z)
 {
-	double* z=(double*)data;
-	return (x+*z/x)/2.0;
+	
+	return (x + z/x)/2.0;
 }
 double square_root(double z, int p)
 {
-	return bisection(0.0,z,p,sqrtNet,&z);
+	double x, gx;
+	double tolerance;
+	tolerance = 0.5 * pow(10.0,-1.0*p);
+	x=z/2.0;
+	gx=sqrtNet(x,z);
+	while(fabs(gx-x)>tolerance)
+	{	
+		x=gx;
+		gx=sqrtNet(x,z);
+	}
+	return x;
 }
 void square_rootTest(int p)
 {
@@ -50,17 +60,17 @@ void square_rootTest(int p)
 	srand(time(NULL)); //changes random seed
 	for(i=0;i<1000;i++)
 	{
-	r=(double)rand()/RAND_MAX;
+		r=(double)rand()/RAND_MAX;
 
-	x=-0.1+ r*1000.0/2.0;
-	if(!fabs(square_root(x,p)-sqrt(x))<(res))
-	{
-	printf("Error!\n");
-	break;
-	}
+		x=0.0+ r*1000.0/2.0;
+		if(!(fabs(square_root(x,p)-sqrt(x))<res))
+		{
+			printf("Error!\n");
+			return;
+		}
 	}
 	printf("All right\n");
-	}
+}
 double Function(double x,void* data)
 {
 	return x*x*x - x*sin(2*x) + 0.2 ;
@@ -74,6 +84,7 @@ int main (void)
 	 r3=bisection(0.75,1.0,6,Function,NULL);
 	printf("r1: %16g\nr2: %16g\nr3: %16g\n",r1,r2,r3);
 	printf("part2\n");
+	//printf(" %lf VS %lf",square_root(0.5,6),sqrt(0.5));
 	square_rootTest(6);
 	 return 0;
 }
