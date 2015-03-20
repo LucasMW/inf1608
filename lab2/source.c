@@ -121,6 +121,10 @@ int main (void)
 	r=10.0;
 	v=4000.0;
 	h=height(10.0,4000.0);
+	if(h<0)
+	{
+		printf("Erro: Altura nao pode ser calculada!\n");
+	}
 	printf("h:%lf r:%lf v:%lf \n", h,10.0,4000.0);
 
 	 return 0;
