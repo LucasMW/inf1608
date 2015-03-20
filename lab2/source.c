@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 double bisection(double a, double b, int p, double (*f) (double x, void* data), void* data)
 {
 	double fA;
@@ -75,9 +79,36 @@ double Function(double x,void* data)
 {
 	return x*x*x - x*sin(2*x) + 0.2 ;
 }
+double Heq(double h, void* data)
+{
+	double *coef;
+	double h2;
+	coef=(double*)data;
+	h2=h*h;
+
+	return -1.0*M_PI*h2*h + 3*M_PI*h2*coef[0] -3*coef[1];
+
+
+}
+double height(double r, double v)
+{
+
+	double vEsfera=M_PI*(4.0/3.0)*r*r*r;
+	double coeficientes[2];
+	if(v>vEsfera)
+	{
+
+		return -1;
+	}
+	coeficientes[0]=r;
+	coeficientes[1]=v;
+	return bisection(0.0,2*r,6,Heq,coeficientes);
+
+}
 int main (void)
 {
 	double r1,r2,r3;
+	double h,r,v;
 	printf("part1\n");
 	 r1=bisection(-0.5,0.25,6,Function,NULL);
 	 r2=bisection(0.25,0.5,6,Function,NULL);
@@ -86,6 +117,12 @@ int main (void)
 	printf("part2\n");
 	//printf(" %lf VS %lf",square_root(0.5,6),sqrt(0.5));
 	square_rootTest(6);
+	printf("part3\n");
+	r=10.0;
+	v=4000.0;
+	h=height(10.0,4000.0);
+	printf("h:%lf r:%lf v:%lf \n", h,10.0,4000.0);
+
 	 return 0;
 }
 
