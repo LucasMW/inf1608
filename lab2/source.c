@@ -13,7 +13,6 @@ double bisection(double a, double b, int p, double (*f) (double x, void* data), 
 	double fC;
 	double c;
 	double tolerance;
-
 	tolerance = 0.5 * pow(10.0,-1.0*p);
 	while(1)
 	{
@@ -33,13 +32,9 @@ double bisection(double a, double b, int p, double (*f) (double x, void* data), 
 		else
 			b=c;
 	}
-	
-
-
 }
 double sqrtNet(double x,double z)
 {
-	
 	return (x + z/x)/2.0;
 }
 double square_root(double z, int p)
@@ -118,14 +113,15 @@ int main (void)
 	//printf(" %lf VS %lf",square_root(0.5,6),sqrt(0.5));
 	square_rootTest(6);
 	printf("part3\n");
-	r=10.0;
-	v=4000.0;
-	h=height(10.0,4000.0);
+  printf("Digite o raio e o volume\n");
+	scanf("%lf%lf",&r,&v);
+	
+	h=height(r,v);
 	if(h<0)
 	{
 		printf("Erro: Altura nao pode ser calculada!\n");
 	}
-	printf("h:%lf r:%lf v:%lf \n", h,10.0,4000.0);
+	printf("h:%lf r:%lf v:%lf \n", h,r,v);
 
 	 return 0;
 }
