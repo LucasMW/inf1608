@@ -89,6 +89,10 @@ int IQI(double x0,double x1,double (*f)(double x), int p, double *r)
 		printf("x:%16g,%d\n",x,iterations);
 		sleep(1);
 		//Salvar os valores das funçoes
+		if(isnan(x))
+		{
+			return 0;//failed
+		}
 		fx=f(x);
 		fxAnt=f(xAnt);
 		fxAntAnt=f(xAntAnt);
@@ -126,6 +130,11 @@ int main (void)
 
 	printf("part2\n");
 	IQI(0.5,2.5,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
+	IQI(0.5,1.5,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
+	IQI(1.0,1.5,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
+	IQI(0.0,1.0,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
+	IQI(1.1,1.3,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
+	IQI(-0.5,-2.5,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
 
 	return 0;
 }
