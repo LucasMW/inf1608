@@ -72,7 +72,7 @@ double function1Derivative(double x)
 int IQI(double x0,double x1,double (*f)(double x), int p, double *r)
 {
 	int iterations=0;
-	double x,xAnt,xAntAnt;
+	double x,xAnt,xAntAnt,xNew;
 	double fx,fxAnt,fxAntAnt;
 	double error;
 	xAntAnt=x0;
@@ -85,23 +85,37 @@ int IQI(double x0,double x1,double (*f)(double x), int p, double *r)
 	fxAntAnt=f(xAntAnt);
 	while(!(fabs(fx)<error))
 	{
-		
+
+		printf("x:%16g,%d\n",x,iterations);
+		sleep(1);
+		//Salvar os valores das funçoes
 		fx=f(x);
 		fxAnt=f(xAnt);
 		fxAntAnt=f(xAntAnt);
+		//Recorrencia
+		xNew=fxAnt*fx/(fxAntAnt-fxAnt)*(fxAntAnt-fx)*xAntAnt;
+		xNew+=fxAntAnt*fx/(fxAnt-fxAntAnt)*(fxAnt-fx)*xAnt;
+		xNew+=fxAntAnt*fxAnt/(fx-fxAntAnt)*(fx-fxAnt)*x;
+		//Prepara as variáveis para a próxima iteração
 		xAntAnt=xAnt;
 		xAnt=x;
-		
+		x=xNew;
+
 		iterations++;
 	}
 	//Means Success
 	*r=x; 
 	return iterations-1;
 }
+double function2(double x)
+{
+	return exp(x)+sin(x)-4.0;
+}
 int main (void)
 {
 	double r1,r2,r3;
 	int it1,it2,it3;
+	double resp;
 	printf("part1\n");
 	it1=NewtonRaphson(-2.0,function1,function1Derivative,6,&r1);
 	it2=NewtonRaphson(1.0,function1,function1Derivative,6,&r2);
@@ -111,5 +125,7 @@ int main (void)
 	printf("it1 %d \t it2 %d \t it3 %d\n",it1,it2,it3);
 
 	printf("part2\n");
+	IQI(0.5,2.5,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
+
 	return 0;
 }
