@@ -97,9 +97,9 @@ int IQI(double x0,double x1,double (*f)(double x), int p, double *r)
 		fxAnt=f(xAnt);
 		fxAntAnt=f(xAntAnt);
 		//Recorrencia
-		xNew=fxAnt*fx/(fxAntAnt-fxAnt)*(fxAntAnt-fx)*xAntAnt;
-		xNew+=fxAntAnt*fx/(fxAnt-fxAntAnt)*(fxAnt-fx)*xAnt;
-		xNew+=fxAntAnt*fxAnt/(fx-fxAntAnt)*(fx-fxAnt)*x;
+		xNew=fxAnt*fx/((fxAntAnt-fxAnt)*(fxAntAnt-fx))*xAntAnt;
+		xNew+=fxAntAnt*fx/((fxAnt-fxAntAnt)*(fxAnt-fx))*xAnt;
+		xNew+=fxAntAnt*fxAnt/((fx-fxAntAnt)*(fx-fxAnt))*x;
 		//Prepara as variáveis para a próxima iteração
 		xAntAnt=xAnt;
 		xAnt=x;
@@ -134,7 +134,7 @@ int main (void)
 	IQI(1.0,1.5,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
 	IQI(0.0,1.0,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
 	IQI(1.1,1.3,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
-	IQI(-0.5,-2.5,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
+	IQI(-0.5,-0.1,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
 
 	return 0;
 }
