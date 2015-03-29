@@ -69,6 +69,13 @@ double function1Derivative(double x)
 	result+=3*sin2*cos(x)*exp(sin2*sin1); 
 	return result;
 }
+/* Interpolação Quadrática Inversa
+x0 Estimativa da raiz
+x1 Outra estimativa da raiz
+f a função cujas raízes se quer descobrir
+p a precisão na qual se deseja encontrar as raízes
+r endereço da variável que receberá a raiz por referência
+*/
 int IQI(double x0,double x1,double (*f)(double x), int p, double *r)
 {
 	int iterations=0;
