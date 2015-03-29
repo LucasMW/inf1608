@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+//#define DEBUG uncomment this line if you wish to see computing proccess 
+
 /*
 Newton-Rapson
 x0 estimativa inicial
@@ -20,12 +22,14 @@ int NewtonRaphson(double x0, double(*f)(double x),double (*fl) (double x), int p
 	flx=fl(x);
 	while(!(fabs(fx)<error))
 	{
-		if(fabs(flx)<0.1) //too near zero
+		if(fabs(flx)<error) //too near zero
 			return 0; // Failed
 		fx=f(x);
 		flx=fl(x);
 		x=x-fx/flx;
-		printf("x:%lf\ti:%d\n",x,iterations);
+		#ifdef DEBUG
+		printf("x:%lf\tfx:%lf\tflx:%lf\ti:%d\n",x,fx,flx,iterations);
+		#endif
 		iterations++;
 	}
 	//Means Success
@@ -92,9 +96,10 @@ int IQI(double x0,double x1,double (*f)(double x), int p, double *r)
 	fxAntAnt=f(xAntAnt);
 	while(!(fabs(fx)<error))
 	{
-
+		#ifdef DEBUG
 		printf("x:%16g,%d\n",x,iterations);
 		sleep(1);
+		#endif
 		//Salvar os valores das funçoes
 		if(isnan(x))
 		{
@@ -131,9 +136,10 @@ int main (void)
 	it1=NewtonRaphson(-2.0,function1,function1Derivative,6,&r1);
 	it2=NewtonRaphson(1.0,function1,function1Derivative,6,&r2);
 	it3=NewtonRaphson(2.0,function1,function1Derivative,6,&r3);
-
-	printf("%16g %16g %16g\n",r1,r2,r3);
-	printf("it1 %d \t it2 %d \t it3 %d\n",it1,it2,it3);
+	it1>0?printf("Answer: %16g %d iterations\n",r1,it1):printf("A resposta não pode ser obtida\n");
+	it2>0?printf("Answer: %16g %d iterations\n",r2,it2):printf("A resposta não pode ser obtida\n");
+	it3>0?printf("Answer: %16g %d iterations\n",r3,it3):printf("A resposta não pode ser obtida\n");
+	
 
 	printf("part2\n");
 	IQI(0.5,2.5,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
