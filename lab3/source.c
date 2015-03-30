@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-//#define DEBUG uncomment this line if you wish to see computing proccess 
+#define DEBUG //uncomment this line if you wish to see computing proccess 
 
 /*
 Newton-Rapson
