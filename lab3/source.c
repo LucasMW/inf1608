@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#define DEBUG //uncomment this line if you wish to see computing proccess 
+//#define DEBUG //uncomment this line if you wish to see computing proccess 
 
 /*
 Newton-Rapson
@@ -98,7 +98,6 @@ int IQI(double x0,double x1,double (*f)(double x), int p, double *r)
 	{
 		#ifdef DEBUG
 		printf("x:%16g,%d\n",x,iterations);
-		sleep(1);
 		#endif
 		//Salvar os valores das funçoes
 		if(isnan(x))
@@ -130,7 +129,7 @@ double function2(double x)
 int main (void)
 {
 	double r1,r2,r3;
-	int it1,it2,it3;
+	int it1,it2,it3,it;
 	double resp;
 	printf("part1\n");
 	it1=NewtonRaphson(-2.0,function1,function1Derivative,6,&r1);
@@ -142,12 +141,12 @@ int main (void)
 	
 
 	printf("part2\n");
-	IQI(0.5,2.5,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
-	IQI(0.5,1.5,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
-	IQI(1.0,1.5,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
-	IQI(0.0,1.0,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
-	IQI(1.1,1.3,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
-	IQI(-0.5,-0.1,function2,6,&resp)>0?printf("Answer: %16g\n",resp):printf("A resposta não pode ser obtida\n");
+	(it=IQI(0.5,2.5,function2,6,&resp))>0?printf("Answer: %16g %d iterations\n",resp,it):printf("A resposta não pode ser obtida\n");
+	(it=IQI(0.5,1.5,function2,6,&resp))>0?printf("Answer: %16g %d iterations\n",resp,it):printf("A resposta não pode ser obtida\n");
+	(it=IQI(1.0,1.5,function2,6,&resp))>0?printf("Answer: %16g %d iterations\n",resp,it):printf("A resposta não pode ser obtida\n");
+	(it=IQI(0.0,1.0,function2,6,&resp))>0?printf("Answer: %16g %d iterations\n",resp,it):printf("A resposta não pode ser obtida\n");
+	(it=IQI(1.1,1.3,function2,6,&resp))>0?printf("Answer: %16g %d iterations\n",resp,it):printf("A resposta não pode ser obtida\n");
+	(it=IQI(-0.5,-0.1,function2,6,&resp))>0?printf("Answer: %16g %d iterations\n",resp,it):printf("A resposta não pode ser obtida\n");
 
 	return 0;
 }
