@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#define DEBUG //uncomment this line to see the computing proccess
 static double MElement(double* A,int i, int j,int n)
 {
 	return *(A+(i*n+j));
@@ -24,10 +24,10 @@ static double MPrint(double* A,int n)
 
 	for(i=0;i<n;i++)
 	{	
-		printf("|\t");
+		printf("|  ");
 		for(j=0;j<n;j++)
 		{
-			printf("%lf\t",A[MIndex(i,j,n)]);
+			printf("%lf  ",A[MIndex(i,j,n)]);
 		}
 		printf("|\n");
 		
@@ -44,11 +44,15 @@ void NaiveGaussElimination(int n, double* A, double* b)
 		for(i=j+1; i<n; i++)
 		{
 			f=MElement(A,i,j,n) / MElement(A,j,j,n);
+			#ifdef DEBUG
 			printf("f: %lf\n",f);
+			#endif
 			for(k=j; k<n; k++)
 			{
 				A[MIndex(i,k,n)]-=f*A[MIndex(j,k,n)];
+				#ifdef DEBUG
 				MPrint(A,n);
+				#endif
 			}
 			b[i]-=f*b[j];
 		}
@@ -62,13 +66,17 @@ void BackSubstitution(int n, double* A, double* b, double* x)
 	for(i=n-1;i>=0;i--)
 	{
 		s=0;
-		for(j=i;j<n;j++)
+		for(j=i+1;j<n;j++)
 		{
 			s+=A[MIndex(i,j,n)]*x[j];
+			#ifdef DEBUG
 			printf("s:%lf j:%d i:%d\n",s,j,i);
+			#endif
 		}
 		x[i]=(b[i]-s)/A[MIndex(i,i,n)];
+		#ifdef DEBUG
 		VPrint(x,n);
+		#endif
 	}
 }
 int main (void)
@@ -94,9 +102,17 @@ int main (void)
 	BackSubstitution(3,M1,b1,xV1);
 	for(i=0;i<3;i++)
 	{
-		printf("%16g\n",xV1[i]);
+		printf("x%d:%16g\n",i,xV1[i]);
 	}
 	
+	NaiveGaussElimination(6,M2,b2);
+	printf("subs\n");
+	MPrint(M2,6);
+	BackSubstitution(6,M2,b2,xV2);
+	for(i=0;i<6;i++)
+	{
+		printf("x%d:%16g\n",i,xV2[i]);
+	}
 
 	return 0;
 }
