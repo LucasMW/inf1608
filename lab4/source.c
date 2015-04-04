@@ -93,7 +93,7 @@ int main (void)
 		0.5, 0,   0,  0, -1,   3
 	};
 	double b2[6]={2.5,1.5,1,1,1.5,2.5};
-	double xV2[3];
+	double xV2[6];
 	int i;
 	
 	printf("part1\n");
