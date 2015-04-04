@@ -39,7 +39,7 @@ void NaiveGaussElimination(int n, double* A, double* b)
 	//Ax=b : A is n*n Matrix
 	int i,j,k;
 	double f;
-	for(j=0; j<n;j++)
+	for(j=0; j<n-1;j++)
 	{
 		for(i=j+1; i<n; i++)
 		{
@@ -93,7 +93,7 @@ int main (void)
 		0.5, 0,   0,  0, -1,   3
 	};
 	double b2[6]={2.5,1.5,1,1,1.5,2.5};
-	double xV2[3];
+	double xV2[6];
 	int i;
 	
 	printf("part1\n");
