@@ -37,9 +37,9 @@ static double MPrint(double* A,int n)
 void NaiveGaussElimination(int n, double* A, double* b)
 {
 	//Ax=b : A is n*n Matrix
-	int i,j,k;
+	int i,j,k, n1 = n-1;
 	double f;
-	for(j=0; j<n;j++)
+	for(j=0; j<n1;j++)
 	{
 		for(i=j+1; i<n; i++)
 		{
