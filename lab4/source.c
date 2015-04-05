@@ -1,6 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define DEBUG //uncomment this line to see the computing proccess
+#include <math.h>
+//#define DEBUG //uncomment this line to see the computing proccess
+static void MCopy(double * org, double* dest,int n)
+{
+	int i,n2;
+	n2=n*n;
+	for(i=0;i<n;i++)
+		dest[i]=org[i];
+	
+}
 static double MElement(double* A,int i, int j,int n)
 {
 	return *(A+(i*n+j));
@@ -79,6 +88,56 @@ void BackSubstitution(int n, double* A, double* b, double* x)
 		#endif
 	}
 }
+void GaussElimination(int n, double* A, double* b)
+{ 
+	int i,j,k;
+	int index;
+	double pvt,t;
+	double f;
+	for(j=0; j<n-1;j++)
+	{
+		for(i=j+1; i<n; i++)
+		{
+			//Finding Pivot
+			pvt=A[MIndex(i,i,n)];
+			index=i;
+			for(k=i+1;k<n;k++)
+			{
+				if(pvt<fabs(A[MIndex(k,i,n)]))
+				{
+					index=k;
+					pvt=fabs(A[MIndex(k,i,n)]);
+				}
+
+			}
+			MPrint(A,n);
+			//Swap Rows
+			for(k=0;k<n;k++)
+			{
+				t=A[MIndex(index,k,n)];
+				A[MIndex(index,k,n)]=A[MIndex(i,k,n)];
+				A[MIndex(i,k,n)]=t;
+			}
+			printf("Swapped\n");
+			MPrint(A,n);
+			f=MElement(A,i,j,n) / MElement(A,j,j,n);
+			#ifdef DEBUG
+			printf("f: %lf\n",f);
+			#endif
+			for(k=j; k<n; k++)
+			{
+				A[MIndex(i,k,n)]-=f*A[MIndex(j,k,n)];
+				#ifdef DEBUG
+				MPrint(A,n);
+				#endif
+			}
+			b[i]-=f*b[j];
+		}
+		
+	}
+}
+
+
 int main (void)
 {
 	double M1[3*3]={1,2,-1,2,1,-2,-3,1,1};
@@ -94,10 +153,13 @@ int main (void)
 	};
 	double b2[6]={2.5,1.5,1,1,1.5,2.5};
 	double xV2[6];
+	double M3[2*2]={pow(10,-17),1.0,1.0,2.0};
+	double b3[2]={1.0,4.0};
+	double xV3[2];
 	int i;
 	
 	printf("part1\n");
-	NaiveGaussElimination(3,M1,b1);
+	GaussElimination(3,M1,b1);
 	printf("subs\n");
 	BackSubstitution(3,M1,b1,xV1);
 	for(i=0;i<3;i++)
@@ -105,7 +167,7 @@ int main (void)
 		printf("x%d:%16g\n",i,xV1[i]);
 	}
 	
-	NaiveGaussElimination(6,M2,b2);
+	GaussElimination(6,M2,b2);
 	printf("subs\n");
 	MPrint(M2,6);
 	BackSubstitution(6,M2,b2,xV2);
@@ -113,6 +175,11 @@ int main (void)
 	{
 		printf("x%d:%16g\n",i,xV2[i]);
 	}
-
+	GaussElimination(2,M3,b3);
+	BackSubstitution(2,M3,b3,xV3);
+	for(i=0;i<2;i++)
+	{
+		printf("x%d:%16g\n",i,xV3[i]);
+	}
 	return 0;
 }
