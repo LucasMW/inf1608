@@ -9,11 +9,11 @@ static long long int fact(int n)
 {
 	int i;
 	long long int r=n;
-	for(i=2;i<n;i++)
+	for(i=1;i<n;i++)
 	{
-		r*=n;
+		r*=(n-i);
 	}
-	return n;
+	return r;
 }
 double myCos(double x) //does not exist
 {
@@ -96,7 +96,7 @@ int main (void)
 	double *amostrasX, *amostrasY;
 	int n;
 	n=Chebyshev(6,&amostrasX,&amostrasY);
-
-
+	printf("n: %d \n",n);
+	printf("fact %d\n",(int)fact(5));
 	return 0;
 }
