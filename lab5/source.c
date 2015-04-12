@@ -8,8 +8,8 @@
 static long long int fact(int n)
 {
 	int i;
-	long long int r=n;
-	for(i=1;i<n;i++)
+	long long int r=1;
+	for(i=0;i<n;i++)
 	{
 		r*=(n-i);
 	}
@@ -95,8 +95,8 @@ int main (void)
 {
 	double *amostrasX, *amostrasY;
 	int n;
-	n=Chebyshev(6,&amostrasX,&amostrasY);
+	n=Chebyshev(10,&amostrasX,&amostrasY);
 	printf("n: %d \n",n);
-	printf("fact %d\n",(int)fact(5));
+	printf("fact %d\n",(int)fact(4));
 	return 0;
 }
