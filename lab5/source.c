@@ -5,7 +5,7 @@
 #define M_PI 3.14159265358979323846
 #endif
 //#define DEBUG //uncomment this line if you want to see the computing proccess
-static long long int fact(int n)
+static long long int fact(unsigned int n)
 {
 	int i;
 	long long int r=1;
