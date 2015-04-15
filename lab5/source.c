@@ -5,6 +5,17 @@
 #define M_PI 3.14159265358979323846
 #endif
 //#define DEBUG //uncomment this line if you want to see the computing proccess
+
+static void printVector(double* vect, int tam)
+{
+	int i;
+	printf("< ");
+	for(i=0;i<tam;i++)
+		printf("%lf ",vect[i]);
+	printf(">\n");
+}
+
+
 static long long int fact(unsigned int n)
 {
 	int i;
@@ -15,10 +26,7 @@ static long long int fact(unsigned int n)
 	}
 	return r;
 }
-double myCos(double x) //does not exist
-{
-	
-}
+
 
 int Chebyshev(int p, double ** X, double ** Y)
 {
@@ -27,6 +35,7 @@ int Chebyshev(int p, double ** X, double ** Y)
 	int n;
 	int i;
 	int b;
+	double start, end;
 	tolerance=pow(10.0,-p);
 	for(n=2;n<1000;n++)
 	{
@@ -34,13 +43,18 @@ int Chebyshev(int p, double ** X, double ** Y)
 		if(error<tolerance)
 			break;
 	}
-	*X = (double*)malloc(sizeof(double)*n);
-	*Y=  (double*)malloc(sizeof(double)*n);
+	printf("n: %d with Error: %16g\n",n,error);
+	start=0.0;
+	end=M_PI/2.0;
+
 	for(i=0,b=1;i<n;i++,b+=2)
 	{
-		
-		(*X)[i]=(M_PI/2)/2.0*cos(b*M_PI)/(2*n)+(M_PI/2.0)/2.0;
-		(*Y)[i]=cos((*X)[i]);
+		*(X+i) = (double*)malloc(sizeof(double)*n);
+		*(Y+i) =  (double*)malloc(sizeof(double)*n);
+		*(*(X+i))= (end-start)/2.0 * cos(b*M_PI)+(start+end)/2.0;
+		printf("X[%d]: %lf with b:%d ",i,(end-start)/2.0 * cos(b*M_PI)+(start+end)/2.0,b);
+		printf("X[i] = %16g\n",*(*(X+i)));
+		*(*(Y+i))=cos(*(*(X+i)));
 	}
 	return n;
 }
@@ -55,7 +69,9 @@ double Lagrange (int n,double* X, double* Y, double x)
 		for(j=0;j<n;j++)
 		{
 			if(j!=i) // there's no (x-X[j])/(X[j]-X[j])
-			L[i]*=(x-X[j])/(X[i]-X[j]);
+			{
+				L[i]*=(x-X[j])/(X[i]-X[j]);
+			}
 		}
 	}	
 	result=0.0;
@@ -119,6 +135,8 @@ int main (void)
 	
 	printf("n: %d \n",n);
 	printf("fact %d\n",(int)fact(4));
+	printVector(amostrasX,n);
+	printVector(amostrasY,n);
 	printf("cos %16g\n",MyCos1(n,amostrasX,amostrasY,M_PI/4));
 	return 0;
 }
