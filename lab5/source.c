@@ -18,7 +18,7 @@ static void printVector(double* vect, int tam)
 
 static long long int fact(unsigned int n)
 {
-	int i;
+	unsigned int i;
 	long long int r=1;
 	for(i=0;i<n;i++)
 	{
@@ -36,6 +36,7 @@ int Chebyshev(int p, double ** X, double ** Y)
 	int i;
 	int b;
 	double start, end;
+	double value;
 	tolerance=pow(10.0,-p);
 	for(n=2;n<1000;n++)
 	{
@@ -46,23 +47,25 @@ int Chebyshev(int p, double ** X, double ** Y)
 	printf("n: %d with Error: %16g\n",n,error);
 	start=0.0;
 	end=M_PI/2.0;
-
+	*X=(double*)malloc(sizeof(double)*n);
+	*Y=(double*)malloc(sizeof(double)*n);
 	for(i=0,b=1;i<n;i++,b+=2)
 	{
-		*(X+i) = (double*)malloc(sizeof(double)*n);
-		*(Y+i) =  (double*)malloc(sizeof(double)*n);
-		*(*(X+i))= (end-start)/2.0 * cos(b*M_PI)+(start+end)/2.0;
-		printf("X[%d]: %lf with b:%d ",i,(end-start)/2.0 * cos(b*M_PI)+(start+end)/2.0,b);
-		printf("X[i] = %16g\n",*(*(X+i)));
-		*(*(Y+i))=cos(*(*(X+i)));
+		value= (end-start)/2.0 * cos(b*M_PI)+(start+end)/2.0;
+		printf("X[%d]: %lf with b:%d ",i,value,b);
+		(*X)[i]=i*b;
+		printf("X[i] = %16g\n",(*X)[i]);
+		(*Y)[i]=cos((*X)[i]);
 	}
 	return n;
 }
-double Lagrange (int n,double* X, double* Y, double x)
+double Lagrange (const int n,double* X, double* Y, double x)
 {
-	double L[n];
+	double* L;
 	int i,j;
 	double result;
+
+	L=(double*)malloc(sizeof(double)*n);
 	for(i=0;i<n;i++)
 	{
 		L[i]=1;
@@ -131,6 +134,7 @@ int main (void)
 {
 	double *amostrasX, *amostrasY;
 	int n;
+
 	n=Chebyshev(10,&amostrasX,&amostrasY);
 	
 	printf("n: %d \n",n);
