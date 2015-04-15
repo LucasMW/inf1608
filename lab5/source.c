@@ -17,36 +17,7 @@ static long long int fact(unsigned int n)
 }
 double myCos(double x) //does not exist
 {
-	if(x<=M_PI/2)
-	{
-		 
-	}
-	else if(x>M_PI/2)
-	{
-		if(x>M_PI)
-		{
-			if(x>1.5*M_PI)
-			{
-				if(x>2*M_PI)
-				{
-					cos(x-fmod(x,2*M_PI));
-				}
-				else // ]3Pi/2, 2Pi]
-				{
-					return cos(2*M_PI-x);
-				}
-			}
-			else // ]Pi. 3Pi/2]
-			{
-				return -myCos(x-M_PI);
-			}
-		}
-		else // ]Pi/2,PI]
-		{
-			 return -myCos(M_PI-x);
-		}
-	}
-	return 0.0;
+	
 }
 
 int Chebyshev(int p, double ** X, double ** Y)
@@ -75,11 +46,60 @@ int Chebyshev(int p, double ** X, double ** Y)
 }
 double Lagrange (int n,double* X, double* Y, double x)
 {
-	return 0.0;
+	double L[n];
+	int i,j;
+	double result;
+	for(i=0;i<n;i++)
+	{
+		L[i]=1;
+		for(j=0;j<n;j++)
+		{
+			if(j!=i) // there's no (x-X[j])/(X[j]-X[j])
+			L[i]*=(x-X[j])/(X[i]-X[j]);
+		}
+	}	
+	result=0.0;
+	for(i=0;i<n;i++)
+	{
+		result+=(Y[i]*L[i]);
+	}	
+
+	return result;
 }
 double MyCos1(int n, double* X, double* Y,double x)
 {
+	 if(x<=M_PI/2)
+	{
+		return Lagrange(n,X,Y,x); 
+	}
+	else if(x>M_PI/2)
+	{
+		if(x>M_PI)
+		{
+			if(x>1.5*M_PI)
+			{
+
+				if(x>2*M_PI)
+				{
+					MyCos1(n,X,Y,x-fmod(x,2*M_PI));
+				}
+				else // ]3Pi/2, 2Pi]
+				{
+					return MyCos1(n,X,Y,2*M_PI-x);
+				}
+			}
+			else // ]Pi. 3Pi/2]
+			{
+				return -MyCos1(n,X,Y,x-M_PI);
+			}
+		}
+		else // ]Pi/2,PI]
+		{
+			 return -MyCos1(n,X,Y,M_PI-x);
+		}
+	}
 	return 0.0;
+	
 }
 double* NewtonCoefficients(int n, double* X, double* Y)
 {
@@ -96,7 +116,9 @@ int main (void)
 	double *amostrasX, *amostrasY;
 	int n;
 	n=Chebyshev(10,&amostrasX,&amostrasY);
+	
 	printf("n: %d \n",n);
 	printf("fact %d\n",(int)fact(4));
+	printf("cos %16g\n",MyCos1(n,amostrasX,amostrasY,M_PI/4));
 	return 0;
 }
