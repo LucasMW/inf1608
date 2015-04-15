@@ -74,6 +74,8 @@ Spline* SplineCreate (int n,double* x, double* y)
 	}
 	A[MIndex(0,0,n)]=1;
 	A[MIndex(n-1,n-1,n)]=1;
+	MPrint(A,n);
+	VPrint(b,n);
 	for(i=1;i<n-1;i++) //fill vector
 		b[i]=3*(delta(y,i)/delta(x,i)-delta(y,i-1)/delta(x,i-1));
 	b[0]=0;
@@ -107,7 +109,16 @@ int main (void)
 	double y[]={1,6,3,4,2,4,7,2};
 	int n=8;
 	int i;
-	SplineCreate(n,x,y);
+	Spline* s;
+	s=SplineCreate(n,x,y);
+	for(i=0;i<n;i++)
+	{
+		printf("%d <%lf;%lf>\n",i,s->c[i],s->d[i]);
+	}
+	for(i=0;i<n;i++)
+	{
+		printf("i: %d evals: %16g\n",i,SplineEval(s,(i+1)/10+i+1));
+	}
 	
 	return 0;
 }
