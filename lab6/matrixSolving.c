@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-
+//#define DEBUG //uncomment this line if you want to see the computing proccess
 static void MCopy(double * org, double* dest,int n)
 {
 	int i,n2;
@@ -17,7 +17,7 @@ static double MElement(double* A,int i, int j,int n)
 {
 	return *(A+(i*n+j));
 }
-static double VPrint(double* V, int n)
+void VPrint(double* V, int n)
 {
 	int i;
 	printf("{ ");
@@ -39,7 +39,7 @@ double MPrint(double* A,int n)
 		printf("|  ");
 		for(j=0;j<n;j++)
 		{
-			printf("%lf  ",A[MIndex(i,j,n)]);
+			printf("%.5lf  ",A[MIndex(i,j,n)]);
 		}
 		printf("|\n");
 		
