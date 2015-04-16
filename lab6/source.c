@@ -54,8 +54,7 @@ Spline* SplineCreate (int n,double* x, double* y)
 		for(j=0;j<n;j++)
 		{
 			val=0;
-			if(i>1&&j>1&&i<n-1,j<n-1)
-			{
+			
 				if(i==j) //diagonal
 				{
 					val=2*(delta(x,i-1)+delta(x,i));
@@ -68,7 +67,7 @@ Spline* SplineCreate (int n,double* x, double* y)
 				{
 					val=delta(x,i-1);
 				}
-			}
+			
 			A[MIndex(i,j,n)]=val;
 		}
 	}
@@ -92,6 +91,7 @@ Spline* SplineCreate (int n,double* x, double* y)
 		spline->b[i]=delta(y,i)/delta(x,i)-delta(x,i)/3.0*(2*spline->c[i]+spline->c[i+1]);
 		spline->d[i]=(spline->c[i+1]-spline->c[i])/3*delta(x,i);
 	}
+	
 	return spline;
 }
 double SplineEval(Spline* s,double x)
@@ -120,15 +120,15 @@ int main (void)
 	double d;
 	Spline* s;
 	s=SplineCreate(n,x,y);
-	for(i=0;i<n;i++)
+	for(i=0;i<n-1;i++)
 	{
-		printf("%d <%lf;%lf>\n",i,s->c[i],s->d[i]);
+		printf("%d <%lf;%lf;%lf;%lf>\n",i,s->a[i],s->b[i],s->c[i],s->d[i]);
 	}
-	for(i=11;i<n*10;i++)
-	{
-		d=i/10.0;
-		printf("i: %d evals: %16g d:%lf\n",i,SplineEval(s,d),d);
-	}
+	// for(i=11;i<n*10;i++)
+	// {
+	// 	d=i/10.0;
+	// 	printf("i: %d evals: %16g d:%lf\n",i,SplineEval(s,d),d);
+	// }
 	
 	return 0;
 }
