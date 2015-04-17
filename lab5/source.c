@@ -99,26 +99,26 @@ double MyCos1(int n, double* X, double* Y,double x)
 			if(x>1.5*M_PI)
 			{
 
-				if(x>2*M_PI)
+				if(x>2.0*M_PI)
 				{
-					printf("]2PI, INF]\n");
-					MyCos1(n,X,Y,x-fmod(x,2*M_PI));
+					printf("x:%lf e ]2PI, INF]\n",x);
+					return MyCos1(n,X,Y,fmod(x,2.0*M_PI));
 				}
 				else // ]3Pi/2, 2Pi]
 				{
-					printf("]3Pi/2, 2Pi]\n");
+					printf("x:%lf e ]3Pi/2, 2Pi]\n",x);
 					return MyCos1(n,X,Y,2.0*M_PI-x);
 				}
 			}
 			else // ]Pi, 3Pi/2]
 			{
-				printf("]Pi, 3Pi/2]\n");
+				printf("x:%lf e ]Pi, 3Pi/2]\n",x);
 				return -MyCos1(n,X,Y,x-M_PI);
 			}
 		}
 		else // ]Pi/2,PI]
 		{
-			printf("]Pi/2,PI]\n");
+			printf("x:%lf e ]Pi/2,PI]\n",x);
 			return -MyCos1(n,X,Y,M_PI-x);
 		}
 	}
@@ -138,7 +138,7 @@ void MyCos1Test(int p)
 	for(i=0;i<1000;i++)
 	{
 	r=(double)rand()/RAND_MAX;
-	x=0.0+ r*2.0*M_PI;
+	x=0.0+ r*20.0*M_PI;
 	fTest=MyCos1(n,amostrasX,amostrasY,x);
 	fControl=cos(x);
 	cmp=fabs(fTest-fControl);
