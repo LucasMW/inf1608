@@ -151,11 +151,40 @@ void MyCos1Test(int p)
 	printf("All right\n");
 	
 }
+//i>j
+double fdiv(int i, int j,double* X, double* Y)
+{
+	if(i==j)
+	{
+		return Y[i];
+	}
+	else
+		return (fdiv(i,j+1,X,Y)-fdiv(i-1,j,X,Y))/(X[i]-X[j]);
+}
 double* NewtonCoefficients(int n, double* X, double* Y)
 {
+	double* b; // Newton coeficients
+	int i,j;
+	b=(double*)malloc(sizeof(double)*n); //allocating coefficients vector
+
+	for(i=0;i<n;i++)
+	{
+		b[i]=fdiv(i,0,X,Y); //populating vector
+	}
+	return b;
+
 }
 double Newton(int n, double* X, double* Y,double* b,double x)
 {
+	double result;
+	int i;
+	result=b[n-1];
+	for(i=n-2;i>=0;i--)
+	{
+		result *= (x-X[i]);
+		result+=b[i];
+	}
+	return result;
 }
 double MyCos2(int n, double* X, double* Y, double* b, double x)
 {
