@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 #ifndef M_PI 
 #define M_PI 3.14159265358979323846
 #endif
@@ -51,9 +52,9 @@ int Chebyshev(int p, double ** X, double ** Y)
 	*Y=(double*)malloc(sizeof(double)*n);
 	for(i=0,b=1;i<n;i++,b+=2)
 	{
-		value= (end-start)/2.0 * cos(b*M_PI)+(start+end)/2.0;
+		value= (end-start)/2.0 * cos(b*M_PI/(n*2.0))+(start+end)/2.0;
 		printf("X[%d]: %lf with b:%d ",i,value,b);
-		(*X)[i]=i*b;
+		(*X)[i]=value;
 		printf("X[i] = %16g\n",(*X)[i]);
 		(*Y)[i]=cos((*X)[i]);
 	}
@@ -120,6 +121,28 @@ double MyCos1(int n, double* X, double* Y,double x)
 	return 0.0;
 	
 }
+void MyCos1Test(int p)
+{
+	double *amostrasX, *amostrasY;
+	int n;
+	int i;
+	double r,x,res;
+	res=0.5 * pow(10.0,-1.0*p);
+	srand(time(NULL)); //changes random seed
+	n=Chebyshev(p,&amostrasX,&amostrasY);
+	for(i=0;i<1000;i++)
+	{
+	r=(double)rand()/RAND_MAX;
+	x=0.0+ r*30*M_PI;
+	if(!(fabs(MyCos1(n,amostrasX,amostrasY,x)-cos(x))<res))
+	{
+	printf("Error!\n");
+	return;
+	}
+	}
+	printf("All right\n");
+	
+}
 double* NewtonCoefficients(int n, double* X, double* Y)
 {
 }
@@ -141,6 +164,6 @@ int main (void)
 	printf("fact %d\n",(int)fact(4));
 	printVector(amostrasX,n);
 	printVector(amostrasY,n);
-	printf("cos %16g\n",MyCos1(n,amostrasX,amostrasY,M_PI/4));
+	printf("cos %16g\n",MyCos1(n,amostrasX,amostrasY,M_PI));
 	return 0;
 }
