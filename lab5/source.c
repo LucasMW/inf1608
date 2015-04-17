@@ -53,9 +53,11 @@ int Chebyshev(int p, double ** X, double ** Y)
 	for(i=0,b=1;i<n;i++,b+=2)
 	{
 		value= (end-start)/2.0 * cos(b*M_PI/(n*2.0))+(start+end)/2.0;
-		printf("X[%d]: %lf with b:%d ",i,value,b);
 		(*X)[i]=value;
+		#ifdef DEBUG
+		printf("X[%d]: %lf with b:%d ",i,value,b);
 		printf("X[i] = %16g\n",(*X)[i]);
+		#endif
 		(*Y)[i]=cos((*X)[i]);
 	}
 	return n;
@@ -100,25 +102,33 @@ double MyCos1(int n, double* X, double* Y,double x)
 			{
 
 				if(x>2.0*M_PI)
-				{
+				{	
+					#ifdef DEBUG
 					printf("x:%lf e ]2PI, INF]\n",x);
+					#endif
 					return MyCos1(n,X,Y,fmod(x,2.0*M_PI));
 				}
 				else // ]3Pi/2, 2Pi]
 				{
+					#ifdef DEBUG
 					printf("x:%lf e ]3Pi/2, 2Pi]\n",x);
+					#endif
 					return MyCos1(n,X,Y,2.0*M_PI-x);
 				}
 			}
 			else // ]Pi, 3Pi/2]
 			{
+				#ifdef DEBUG
 				printf("x:%lf e ]Pi, 3Pi/2]\n",x);
+				#endif
 				return -MyCos1(n,X,Y,x-M_PI);
 			}
 		}
 		else // ]Pi/2,PI]
 		{
+			#ifdef DEBUG
 			printf("x:%lf e ]Pi/2,PI]\n",x);
+			#endif
 			return -MyCos1(n,X,Y,M_PI-x);
 		}
 	}
@@ -201,24 +211,32 @@ double MyCos2(int n, double* X, double* Y, double* b, double x)
 
 				if(x>2.0*M_PI)
 				{
+					#ifdef DEBUG
 					printf("x:%lf e ]2PI, INF]\n",x);
+					#endif
 					return MyCos2(n,X,Y,b,fmod(x,2.0*M_PI));
 				}
 				else // ]3Pi/2, 2Pi]
 				{
+					#ifdef DEBUG
 					printf("x:%lf e ]3Pi/2, 2Pi]\n",x);
+					#endif
 					return MyCos2(n,X,Y,b,2.0*M_PI-x);
 				}
 			}
 			else // ]Pi, 3Pi/2]
 			{
+				#ifdef DEBUG
 				printf("x:%lf e ]Pi, 3Pi/2]\n",x);
+				#endif
 				return -MyCos2(n,X,Y,b,x-M_PI);
 			}
 		}
 		else // ]Pi/2,PI]
 		{
+			#ifdef DEBUG
 			printf("x:%lf e ]Pi/2,PI]\n",x);
+			#endif
 			return -MyCos2(n,X,Y,b,M_PI-x);
 		}
 	}
