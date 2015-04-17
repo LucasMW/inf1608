@@ -101,21 +101,25 @@ double MyCos1(int n, double* X, double* Y,double x)
 
 				if(x>2*M_PI)
 				{
+					printf("]2PI, INF]\n");
 					MyCos1(n,X,Y,x-fmod(x,2*M_PI));
 				}
 				else // ]3Pi/2, 2Pi]
 				{
-					return MyCos1(n,X,Y,2*M_PI-x);
+					printf("]3Pi/2, 2Pi]\n");
+					return MyCos1(n,X,Y,2.0*M_PI-x);
 				}
 			}
-			else // ]Pi. 3Pi/2]
+			else // ]Pi, 3Pi/2]
 			{
+				printf("]Pi, 3Pi/2]\n");
 				return -MyCos1(n,X,Y,x-M_PI);
 			}
 		}
 		else // ]Pi/2,PI]
 		{
-			 return -MyCos1(n,X,Y,M_PI-x);
+			printf("]Pi/2,PI]\n");
+			return -MyCos1(n,X,Y,M_PI-x);
 		}
 	}
 	return 0.0;
@@ -127,16 +131,20 @@ void MyCos1Test(int p)
 	int n;
 	int i;
 	double r,x,res;
+	double fTest,fControl,cmp;
 	res=0.5 * pow(10.0,-1.0*p);
 	srand(time(NULL)); //changes random seed
 	n=Chebyshev(p,&amostrasX,&amostrasY);
 	for(i=0;i<1000;i++)
 	{
 	r=(double)rand()/RAND_MAX;
-	x=0.0+ r*30*M_PI;
-	if(!(fabs(MyCos1(n,amostrasX,amostrasY,x)-cos(x))<res))
+	x=0.0+ r*2.0*M_PI;
+	fTest=MyCos1(n,amostrasX,amostrasY,x);
+	fControl=cos(x);
+	cmp=fabs(fTest-fControl);
+	if(!(cmp<res))
 	{
-	printf("Error!\n");
+	printf("Error in turn %d! \n%lf VS %lf \nerror: %lf  >= res %lf\nvalue: %lf\n",i+1,fTest,fControl,cmp,res,x);
 	return;
 	}
 	}
@@ -155,15 +163,16 @@ double MyCos2(int n, double* X, double* Y, double* b, double x)
 }
 int main (void)
 {
-	double *amostrasX, *amostrasY;
-	int n;
+	// double *amostrasX, *amostrasY;
+	// int n;
 
-	n=Chebyshev(10,&amostrasX,&amostrasY);
+	MyCos1Test(10);
+	// n=Chebyshev(10,&amostrasX,&amostrasY);
 	
-	printf("n: %d \n",n);
-	printf("fact %d\n",(int)fact(4));
-	printVector(amostrasX,n);
-	printVector(amostrasY,n);
-	printf("cos %16g\n",MyCos1(n,amostrasX,amostrasY,M_PI));
+	// printf("n: %d \n",n);
+	// printf("fact %d\n",(int)fact(4));
+	// printVector(amostrasX,n);
+	// printVector(amostrasY,n);
+	// printf("cos %16g\n",MyCos1(n,amostrasX,amostrasY,M_PI));
 	return 0;
 }
