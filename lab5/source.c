@@ -188,14 +188,79 @@ double Newton(int n, double* X, double* Y,double* b,double x)
 }
 double MyCos2(int n, double* X, double* Y, double* b, double x)
 {
+	if(x<=M_PI/2)
+	{
+		return Newton(n,X,Y,b,x); 
+	}
+	else if(x>M_PI/2)
+	{
+		if(x>M_PI)
+		{
+			if(x>1.5*M_PI)
+			{
+
+				if(x>2.0*M_PI)
+				{
+					printf("x:%lf e ]2PI, INF]\n",x);
+					return MyCos2(n,X,Y,b,fmod(x,2.0*M_PI));
+				}
+				else // ]3Pi/2, 2Pi]
+				{
+					printf("x:%lf e ]3Pi/2, 2Pi]\n",x);
+					return MyCos2(n,X,Y,b,2.0*M_PI-x);
+				}
+			}
+			else // ]Pi, 3Pi/2]
+			{
+				printf("x:%lf e ]Pi, 3Pi/2]\n",x);
+				return -MyCos2(n,X,Y,b,x-M_PI);
+			}
+		}
+		else // ]Pi/2,PI]
+		{
+			printf("x:%lf e ]Pi/2,PI]\n",x);
+			return -MyCos2(n,X,Y,b,M_PI-x);
+		}
+	}
 	return 0.0;
+}
+void MyCos2Test(int p)
+{
+	double *amostrasX, *amostrasY;
+	int n;
+	int i;
+	double* b;
+	double r,x,res;
+	double fTest,fControl,cmp;
+	res=0.5 * pow(10.0,-1.0*p);
+	srand(time(NULL)); //changes random seed
+	n=Chebyshev(p,&amostrasX,&amostrasY);
+	b=NewtonCoefficients(n,amostrasX,amostrasY);
+
+	for(i=0;i<1000;i++)
+	{
+	r=(double)rand()/RAND_MAX;
+	x=0.0+ r*20.0*M_PI;
+	fTest=MyCos2(n,amostrasX,amostrasY,b,x);
+	fControl=cos(x);
+	cmp=fabs(fTest-fControl);
+	if(!(cmp<res))
+	{
+	printf("Error in turn %d! \n%lf VS %lf \nerror: %lf  >= res %lf\nvalue: %lf\n",i+1,fTest,fControl,cmp,res,x);
+	return;
+	}
+	}
+	printf("All right\n");
+	
 }
 int main (void)
 {
 	// double *amostrasX, *amostrasY;
 	// int n;
-
+	printf("Part1\n");
 	MyCos1Test(10);
+	printf("Part2\n");
+	MyCos2Test(10);
 	// n=Chebyshev(10,&amostrasX,&amostrasY);
 	
 	// printf("n: %d \n",n);
