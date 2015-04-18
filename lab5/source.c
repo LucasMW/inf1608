@@ -147,21 +147,21 @@ void MyCos1Test(int p)
 	n=Chebyshev(p,&amostrasX,&amostrasY);
 	for(i=0;i<1000;i++)
 	{
-	r=(double)rand()/RAND_MAX;
-	x=0.0+ r*20.0*M_PI;
-	fTest=MyCos1(n,amostrasX,amostrasY,x);
-	fControl=cos(x);
-	cmp=fabs(fTest-fControl);
-	if(!(cmp<res))
-	{
-	printf("Error in turn %d! \n%lf VS %lf \nerror: %lf  >= res %lf\nvalue: %lf\n",i+1,fTest,fControl,cmp,res,x);
-	return;
-	}
+		r=(double)rand()/RAND_MAX;
+		x=0.0+ r*20.0*M_PI;
+		fTest=MyCos1(n,amostrasX,amostrasY,x);
+		fControl=cos(x);
+		cmp=fabs(fTest-fControl);
+		if(!(cmp<res))
+		{
+			printf("Error in turn %d! \n%lf VS %lf \nerror: %lf  >= res %lf\nvalue: %lf\n",i+1,fTest,fControl,cmp,res,x);
+			return;
+		}
 	}
 	printf("All right\n");
 	
 }
-//i>j
+// fdiv recursive impletation where i>j
 double fdiv(int i, int j,double* X, double* Y)
 {
 	if(i==j)
@@ -257,34 +257,27 @@ void MyCos2Test(int p)
 
 	for(i=0;i<1000;i++)
 	{
-	r=(double)rand()/RAND_MAX;
-	x=0.0+ r*20.0*M_PI;
-	fTest=MyCos2(n,amostrasX,amostrasY,b,x);
-	fControl=cos(x);
-	cmp=fabs(fTest-fControl);
-	if(!(cmp<res))
-	{
-	printf("Error in turn %d! \n%lf VS %lf \nerror: %lf  >= res %lf\nvalue: %lf\n",i+1,fTest,fControl,cmp,res,x);
-	return;
-	}
+		r=(double)rand()/RAND_MAX;
+		x=0.0+ r*20.0*M_PI;
+		fTest=MyCos2(n,amostrasX,amostrasY,b,x);
+		fControl=cos(x);
+		cmp=fabs(fTest-fControl);
+		if(!(cmp<res))
+		{
+			printf("Error in turn %d! \n%lf VS %lf \nerror: %lf  >= res %lf\nvalue: %lf\n",i+1,fTest,fControl,cmp,res,x);
+			return;
+		}
 	}
 	printf("All right\n");
 	
 }
 int main (void)
 {
-	// double *amostrasX, *amostrasY;
-	// int n;
+	
 	printf("Part1\n");
 	MyCos1Test(10);
 	printf("Part2\n");
 	MyCos2Test(10);
-	// n=Chebyshev(10,&amostrasX,&amostrasY);
 	
-	// printf("n: %d \n",n);
-	// printf("fact %d\n",(int)fact(4));
-	// printVector(amostrasX,n);
-	// printVector(amostrasY,n);
-	// printf("cos %16g\n",MyCos1(n,amostrasX,amostrasY,M_PI));
 	return 0;
 }
