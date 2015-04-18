@@ -36,7 +36,8 @@ int Chebyshev(int p, double ** X, double ** Y)
 	int n;
 	int i;
 	int b;
-	double start, end;
+	double start, end; //the exist make code more legible and useful in the future
+	double diffBy2,sumBy2,PiBy2n; //constant coeficients
 	double value;
 	tolerance=pow(10.0,-p);
 	for(n=2;n<1000;n++)
@@ -48,11 +49,15 @@ int Chebyshev(int p, double ** X, double ** Y)
 	printf("n: %d with Error: %16g\n",n,error);
 	start=0.0;
 	end=M_PI/2.0;
+
+	diffBy2=(end-start)/2.0;
+	sumBy2=(start+end)/2.0;
+	PiBy2n=M_PI/(n*2.0);
 	*X=(double*)malloc(sizeof(double)*n);
 	*Y=(double*)malloc(sizeof(double)*n);
 	for(i=0,b=1;i<n;i++,b+=2)
 	{
-		value= (end-start)/2.0 * cos(b*M_PI/(n*2.0))+(start+end)/2.0;
+		value= diffBy2 * cos(b*PiBy2n)+ sumBy2;  //runs faster
 		(*X)[i]=value;
 		#ifdef DEBUG
 		printf("X[%d]: %lf with b:%d ",i,value,b);
