@@ -46,7 +46,7 @@ int Chebyshev(int p, double ** X, double ** Y)
 		if(error<tolerance)
 			break;
 	}
-	printf("n: %d with Error: %16g\n",n,error);
+	printf("samples: %d with Allowed Error: %16g\n",n,error);
 	start=0.0;
 	end=M_PI/2.0;
 
@@ -278,7 +278,10 @@ void MyCos2Test(int p)
 }
 int main (void)
 {
-	
+	printf("This program tests MyCos implementation by testing 1000 pseudo-random samples\n");
+	printf("if there is no error it will print allright\n");
+	printf("else it will specify the error\n");
+	printf("In part1 it will test Lagrange implementation \nand in part2 Newton implementation\n");
 	printf("Part1\n");
 	MyCos1Test(10);
 	printf("Part2\n");
