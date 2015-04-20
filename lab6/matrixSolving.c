@@ -30,7 +30,7 @@ int MIndex(int i, int j,int n)
 {
 	return i*n+j;
 }
-double MPrint(double* A,int n)
+void MPrint(double* A,int n)
 {
 	int i,j;
 
