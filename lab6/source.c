@@ -111,6 +111,7 @@ double SplineEval(Spline* s,double x)
 	return s->a[i]+s->b[i]*pot+ s->c[i]*(pot*pot)+s->d[i]*(pot*pot*pot);
 	
 }
+
 int main (void)
 {
 	double x[]={1,2,3,4,5,6,7,8};
@@ -119,16 +120,19 @@ int main (void)
 	int i;
 	double d;
 	Spline* s;
+	FILE* output;
 	s=SplineCreate(n,x,y);
 	for(i=0;i<n-1;i++)
 	{
 		printf("%d <%lf;%lf;%lf;%lf>\n",i,s->a[i],s->b[i],s->c[i],s->d[i]);
 	}
-	// for(i=11;i<n*10;i++)
-	// {
-	// 	d=i/10.0;
-	// 	printf("i: %d evals: %16g d:%lf\n",i,SplineEval(s,d),d);
-	// }
+	output=fopen("splineEval.txt","wt");
+	//print values to file
+	for(i=11;i<n*10;i++)
+	{
+		d=i/10.0;
+		fprintf(output,"i: %d evals: %16g d:%lf\n",i,SplineEval(s,d),d);
+	}
 	
 	return 0;
 }
