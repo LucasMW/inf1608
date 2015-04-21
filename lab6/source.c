@@ -98,13 +98,16 @@ double SplineEval(Spline* s,double x)
 {
 	int i;
 	double pot;
+	printf("x: %lf ",x);
 	for(i=0;i<s->n-1;i++)
 	{
-		if(x>s->x[i]&&x<s->x[i+1])
+		//printf("%lf %lf\n ",s->x[i], s->x[i+1]);
+		if(x>s->x[i]&&x<=s->x[i+1])
 		{
 			printf("matched %d ",i);
 			break;
 		}
+
 	}
 	printf("breaked in %d\n",i);
 	pot =x-s->x[i];
@@ -124,14 +127,16 @@ int main (void)
 	s=SplineCreate(n,x,y);
 	for(i=0;i<n-1;i++)
 	{
-		printf("%d <%lf;%lf;%lf;%lf>\n",i,s->a[i],s->b[i],s->c[i],s->d[i]);
+		//printf("%d <%lf;%lf;%lf;%lf>\n",i,s->a[i],s->b[i],s->c[i],s->d[i]);
 	}
 	output=fopen("splineEval.txt","wt");
 	//print values to file
 	for(i=11;i<n*10;i++)
 	{
 		d=i/10.0;
-		fprintf(output,"i: %d evals: %16g d:%lf\n",i,SplineEval(s,d),d);
+		printf("i: %d evals: %16g d:%lf\n",i,SplineEval(s,d),d);
+
+		//fprintf(output,"i: %d evals: %16g d:%lf\n",i,SplineEval(s,d),d);
 	}
 	
 	return 0;
