@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<math.h>
 #include"matrixSolving.h"
-
+//#define DEBUG //uncomment this line if you want to see the computing proccess
 struct spline //Cubic Splines
 {	
 	int n; //number of points
@@ -76,13 +76,17 @@ Spline* SplineCreate (int n,double* x, double* y)
 	A[MIndex(n-1,n-1,n)]=1;
 	A[MIndex(n-1,n-2,n)]=0;
 	A[MIndex(n-2,n-1,n)]=delta(x,n-2);
+	#ifdef DEBUG
 	MPrint(A,n);
+	#endif
 
 	for(i=1;i<n-1;i++) //fill vector
 		b[i]=3*(delta(y,i)/delta(x,i)-delta(y,i-1)/delta(x,i-1));
 	b[0]=0;
 	b[n-1]=0;
+	#ifdef DEBUG
 	VPrint(b,n);
+	#endif
 	NaiveGaussElimination(n,A,b);
 	BackSubstitution(n,A,b,spline->c); //solve system
 	for(i=0;i<n-1;i++) //fill spline coeficients
@@ -98,27 +102,36 @@ double SplineEval(Spline* s,double x)
 {
 	int i;
 	double pot;
+	#ifdef DEBUG
 	printf("x: %lf ",x);
+	#endif
 	for(i=0;i<s->n-1;i++)
 	{
 		//printf("%lf %lf\n ",s->x[i], s->x[i+1]);
 		if(x>s->x[i]&&x<=s->x[i+1])
 		{
+			#ifdef DEBUG
 			printf("matched %d ",i);
+			#endif
 			break;
 		}
 
 	}
+	#ifdef DEBUG
 	printf("breaked in %d\n",i);
+	#endif
 	pot =x-s->x[i];
 	return s->a[i]+s->b[i]*pot+ s->c[i]*(pot*pot)+s->d[i]*(pot*pot*pot);
 	
 }
 
+
 int main (void)
 {
 	double x[]={1,2,3,4,5,6,7,8};
 	double y[]={1,6,3,4,2,4,7,2};
+	double* nx;
+	double* ny;
 	int n=8;
 	int i;
 	double d;
@@ -131,13 +144,16 @@ int main (void)
 	}
 	output=fopen("splineEval.txt","wt");
 	//print values to file
+
+	
 	for(i=11;i<n*10;i++)
 	{
 		d=i/10.0;
-		printf("i: %d evals: %16g d:%lf\n",i,SplineEval(s,d),d);
+		printf("evals: %16g for x %lf\n",SplineEval(s,d),d);
 
-		//fprintf(output,"i: %d evals: %16g d:%lf\n",i,SplineEval(s,d),d);
+		fprintf(output,"%lf %lf\n",d,SplineEval(s,d));
 	}
+	printf("See logFile <SplineEval.txt> for exact coordinates\n");
 	
 	return 0;
 }
