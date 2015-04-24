@@ -108,7 +108,7 @@ double SplineEval(Spline* s,double x)
 	for(i=0;i<s->n-1;i++)
 	{
 		//printf("%lf %lf\n ",s->x[i], s->x[i+1]);
-		if(x>s->x[i]&&x<=s->x[i+1])
+		if(x>=s->x[i]&&x<=s->x[i+1])
 		{
 			#ifdef DEBUG
 			printf("matched %d ",i);
