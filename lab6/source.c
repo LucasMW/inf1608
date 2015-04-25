@@ -101,7 +101,7 @@ Spline* SplineCreate (int n,double* x, double* y)
 double SplineEval(Spline* s,double x)
 {
 	int i;
-	double pot;
+	double pot,pot2;
 	#ifdef DEBUG
 	printf("x: %lf ",x);
 	#endif
@@ -121,7 +121,8 @@ double SplineEval(Spline* s,double x)
 	printf("breaked in %d\n",i);
 	#endif
 	pot =x-s->x[i];
-	return s->a[i]+s->b[i]*pot+ s->c[i]*(pot*pot)+s->d[i]*(pot*pot*pot);
+	pot2=pot*pot;
+	return s->a[i]+s->b[i]*pot+ s->c[i]*(pot2)+s->d[i]*(pot2*pot);
 	
 }
 
