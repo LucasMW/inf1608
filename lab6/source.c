@@ -153,7 +153,7 @@ int main (void)
 	
 	//print values to file
 	printf("Spline evaluations results:\n");
-	for(i=11;i<n*10;i++)
+	for(i=10;i<81;i++)  //[1.0 ; 8.0]
 	{
 		d=i/10.0;
 		printf("evals: %16g for x %lf\n",SplineEval(s,d),d);
