@@ -138,15 +138,21 @@ int main (void)
 	double d;
 	Spline* s;
 	FILE* output;
-	s=SplineCreate(n,x,y);
-	for(i=0;i<n-1;i++)
-	{
-		//printf("%d <%lf;%lf;%lf;%lf>\n",i,s->a[i],s->b[i],s->c[i],s->d[i]);
-	}
-	output=fopen("splineEval.txt","wt");
-	//print values to file
 
+	//generate spline coefficients
+	s=SplineCreate(n,x,y); 
+
+	//outputs the coefficients
+	printf("Spline coeficients:\n");
+	for(i=0;i<n-1;i++) 
+	{
+		printf("%d <%lf;%lf;%lf;%lf>\n",i,s->a[i],s->b[i],s->c[i],s->d[i]);
+	}
 	
+	output=fopen("splineEval.txt","wt");
+	
+	//print values to file
+	printf("Spline evaluations results:\n");
 	for(i=11;i<n*10;i++)
 	{
 		d=i/10.0;
