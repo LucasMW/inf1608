@@ -46,7 +46,7 @@ double* cria_transposta(int m,int n,double* A)
 	T=cria_matriz(n,m);
 	for(i=0;i<m;i++)
 		for(j=0;j<n;j++)
-			T[index(i,j,n)]=A[index(j,i,n)];
+			T[index(j,i,m)]=A[index(i,j,n)];
 	return T;
 }
 double* cria_mult(int m,int n,int l, double* A, double* B)
@@ -89,15 +89,18 @@ int main (void)
 	};
 	M1=cria_matriz(3,3);
 	copia_matriz(3,3,A,M1);
-
+	printf("\nM1=\n");
 	print_matriz(3,3,M1);
 
 	M2=cria_transposta(3,3,M1);
+	printf("\nM2=\n");
 	print_matriz(3,3,M2);
 
 	printf("\n");
+	printf("\nB=\n");
 	print_matriz(3,2,B);
 	M3=cria_transposta(3,2,B);
+	printf("\nM3=\n");
 	print_matriz(2,3,M3);
 	//print_vetor(M2,3*3);
 	return 0;
