@@ -76,6 +76,14 @@ double* cria_mult(int m,int n,int l, double* A, double* B)
 
 double* cria_mmq(int m,int n,double* A,double* b)
 {
+	double* At;
+	double* AtA;
+	double* Atb;
+	double* Atb;
+	At=cria_transposta(m,n,A);
+	AtA=cria_mult(n,m,n);
+	Atb=cria_mult(n,m,1);
+	
 	return NULL;
 }
 double norma2(int n,double* v)
