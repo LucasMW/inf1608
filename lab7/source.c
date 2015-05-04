@@ -50,14 +50,28 @@ double* cria_transposta(int m,int n,double* A)
 	return T;
 }
 double* cria_mult(int m,int n,int l, double* A, double* B)
-{
+{				//A (mxn) * B (nxl)
 	double * C;
 	int i,j,k;
-	C=cria_matriz(m,n);
+	double sum;
+	C=cria_matriz(m,l);
+
+	print_matriz(m,n,A);
+	print_matriz(n,l,B);
 	for(i=0;i<m;i++)
-		for(j=0;j<n;j++)
+	{
+		for(j=0;j<l;j++)
+		{	sum=0;
 			for(k=0;k<n;k++)
-				C[index(i,j,n)]=A[index(i,k,n)]*B[index(k,j,n)];
+			{
+				sum+=A[index(i,k,n)]*B[index(k,j,l)];
+				printf("A(%d,%d) * B(%d,%d) \n%lf*%lf\nsum: %lf\n",i,k,k,j,A[index(i,k,n)],B[index(k,j,l)],sum);
+			}
+			printf("(%d,%d) %lf \n",i,j,sum);
+			C[index(i,j,l)]=sum;
+		}
+	}
+			return C;
 }
 
 double* cria_mmq(int m,int n,double* A,double* b)
@@ -87,6 +101,40 @@ int main (void)
 		4.0,5.0,
 		7.0,8.0
 	};
+	double C[] = 
+	{
+		2.0,3.0,
+		0.0,1.0,
+		-1.0,4.0
+	};
+	double D[] = 
+	{
+		1.0,2.0,3.0
+		-2.0,0.0,4.0
+	};
+	double E[] = 
+	{
+		1.0,2.0,
+		3.0,4.0
+	};
+	double F[] = 
+	{
+		-1.0,-2.0,
+		-3.0,-4.0
+	};
+	double I2[] = 
+	{
+		1.0,0.0,
+		0.0,1.0,
+	};
+	double I3[] = 
+	{
+		1.0,0.0,0.0,
+		0.0,1.0,0.0,
+		0.0,0.0,1.0
+	};
+
+
 	M1=cria_matriz(3,3);
 	copia_matriz(3,3,A,M1);
 	printf("\nM1=\n");
@@ -100,8 +148,17 @@ int main (void)
 	printf("\nB=\n");
 	print_matriz(3,2,B);
 	M3=cria_transposta(3,2,B);
+
 	printf("\nM3=\n");
 	print_matriz(2,3,M3);
+
+	M4=cria_mult(2,2,2,E,I2);
+	printf("sd\n");
+	print_matriz(2,2,M4);
+	printf("\n");
+	M5=cria_mult(3,3,3,A,I3);
+	printf("sd\n");
+	print_matriz(3,3,M5);
 	//print_vetor(M2,3*3);
 	return 0;
 }
