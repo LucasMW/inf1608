@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
+#include "matrixSolving.h"
 
 static int index(int i,int j, int n)
 {
@@ -79,11 +80,11 @@ double* cria_mmq(int m,int n,double* A,double* b)
 	double* At;
 	double* AtA;
 	double* Atb;
-	double* Atb;
+
 	At=cria_transposta(m,n,A);
-	AtA=cria_mult(n,m,n);
-	Atb=cria_mult(n,m,1);
-	
+	AtA=cria_mult(n,m,n,At,A);
+	Atb=cria_mult(n,m,1,At,b);
+
 	return NULL;
 }
 double norma2(int n,double* v)
