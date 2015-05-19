@@ -75,6 +75,23 @@ double AdaptativeSimpson(double a, double b, double (*f) (double x), double tol)
 	}
 
 }
+double AdaptativeSimpsonPlus(double a, double b, double (*f)(double x), double tol)
+{
+	double Sab; 
+	double Sac; 
+	double Scb;
+	double E;
+	double D;
+	double h;
+	h = b-a;
+	Sab=Simpson(a,b,f);
+	Sac=Simpson(a,a+h/2,f);
+	Scb=Simpson(a+h/2,b,f);
+}
+static double SimsponPlusEvalf(double a, double b, double epsilon,double S, double fa, double fb, double fc, int bottom, double (*f)(double x))
+{
+
+}
 
 int main (void)
 {
