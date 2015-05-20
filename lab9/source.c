@@ -75,23 +75,37 @@ double AdaptativeSimpson(double a, double b, double (*f) (double x), double tol)
 	}
 
 }
+static double SimpsonPlusEvalf(double a, double b, double S, double fa, double fb, double fc, int bottom, double (*f)(double x),double tol)
+{
+double c = (a + b)/2, h = b - a;                                                                  
+  double d = (a + c)/2, e = (c + b)/2;                                                              
+  double fd = f(d), fe = f(e);                                                                      
+  double Sleft = (h/12)*(fa + 4*fd + fc);                                                           
+  double Sright = (h/12)*(fc + 4*fe + fb);                                                          
+  double S2 = Sleft + Sright;                                                                       
+  if (bottom <= 100 || fabs(S2 - S) <= 8*tol)                                                    
+    return S2 + (S2 - S)/8;                                                                        
+  return SimpsonPlusEvalf( a, c,  Sleft,  fa, fc, fd, bottom-1, f, tol/2.0) + SimpsonPlusEvalf( c, b, Sright, fc, fb, fe, bottom-1, f , tol/2.0); 
+}
 double AdaptativeSimpsonPlus(double a, double b, double (*f)(double x), double tol)
 {
 	double Sab; 
 	double Sac; 
 	double Scb;
-	double E;
-	double D;
-	double h;
-	h = b-a;
+	double fa;
+	double fb;
+	double fc;
+	double c=(b-a)/2.0;
+	fa=f(a);
+	fb=f(b);
+	fc=f(c);
 	Sab=Simpson(a,b,f);
-	Sac=Simpson(a,a+h/2,f);
-	Scb=Simpson(a+h/2,b,f);
-}
-static double SimsponPlusEvalf(double a, double b, double epsilon,double S, double fa, double fb, double fc, int bottom, double (*f)(double x))
-{
+	Sac=Simpson(a,c,f);
+	Scb=Simpson(c,b,f);
 
+	SimpsonPlusEvalf(a,b,Sac,fa,fb,fc,0,f,tol);
 }
+
 
 int main (void)
 {
