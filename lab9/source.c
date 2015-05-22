@@ -4,7 +4,7 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
-//#define DEBUG //uncomment this line if you want to see tha computing proccess
+#define DEBUG //uncomment this line if you want to see tha computing proccess
 double Simpson (double a, double b, double (*f) (double x))
 {
 	double mid=(a+b)/2.0;
@@ -82,9 +82,12 @@ double c = (a + b)/2, h = b - a;
   double fd = f(d), fe = f(e);                                                                      
   double Sleft = (h/12)*(fa + 4*fd + fc);                                                           
   double Sright = (h/12)*(fc + 4*fe + fb);                                                          
-  double S2 = Sleft + Sright;                                                                       
-  if (bottom <= 100 || fabs(S2 - S) <= 8*tol)                                                    
-    return S2 + (S2 - S)/8;                                                                        
+  double S2 = Sleft + Sright;    
+  #ifdef DEBUG
+  printf("jdakdn\n");
+  #endif                                                                   
+  if (fabs(S2 - S) <= 15*tol)                                                    
+    return S2 + (S2 - S)/15;                                                                        
   return SimpsonPlusEvalf( a, c,  Sleft,  fa, fc, fd, bottom-1, f, tol/2.0) + SimpsonPlusEvalf( c, b, Sright, fc, fb, fe, bottom-1, f , tol/2.0); 
 }
 double AdaptativeSimpsonPlus(double a, double b, double (*f)(double x), double tol)
@@ -103,7 +106,7 @@ double AdaptativeSimpsonPlus(double a, double b, double (*f)(double x), double t
 	Sac=Simpson(a,c,f);
 	Scb=Simpson(c,b,f);
 
-	SimpsonPlusEvalf(a,b,Sac,fa,fb,fc,0,f,tol);
+	return SimpsonPlusEvalf(a,b,Sac,fa,fb,fc,1000,f,tol);
 }
 
 
@@ -118,6 +121,9 @@ int main (void)
 	printf("Adaptative Simpson Tests\n");
 	printf("int(f1,%lf,%lf)=%lf\n",0.0,1.0,AdaptativeSimpson(0.0,1.0,Function1,0.5*pow(10.0,-5.0)));
 	printf("int(f2,%lf,%lf)=%lf\n",0.0,M_PI,AdaptativeSimpson(0.0,M_PI,Function2,0.5*pow(10.0,-5.0)));
+	printf("Adaptative Simpson Plus Tests\n");
+	printf("int(f1,%lf,%lf)=%lf\n",0.0,1.0,AdaptativeSimpsonPlus(0.0,1.0,Function1,0.5*pow(10.0,-5.0)));
+	printf("int(f2,%lf,%lf)=%lf\n",0.0,M_PI,AdaptativeSimpsonPlus(0.0,M_PI,Function2,0.5*pow(10.0,-5.0)));
 
 	return 0;
 }
