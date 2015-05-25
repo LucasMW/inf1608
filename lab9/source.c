@@ -4,7 +4,9 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
-#define DEBUG //uncomment this line if you want to see tha computing proccess
+//#define DEBUG //uncomment this line if you want to see tha computing proccess
+
+
 double Simpson (double a, double b, double (*f) (double x))
 {
 	double mid=(a+b)/2.0;
@@ -93,26 +95,22 @@ double c = (a + b)/2, h = b - a;
   printf("k %d \n",k++);
   #endif                                                                   
   if (fabs(S2 - S) <= 15*tol)                                                    
-    return S2 + (S2 - S)/15;                                                                        
+    return S2 ;                                                                        
   return SimpsonPlusEvalf( a, c,  Sleft,  fa, fc, fd, f, tol/2.0) + SimpsonPlusEvalf( c, b, Sright, fc, fb, fe, f , tol/2.0); 
 }
 double AdaptativeSimpsonPlus(double a, double b, double (*f)(double x), double tol)
 {
-	double Sab; 
-	double Sac; 
-	double Scb;
 	double fa;
 	double fb;
 	double fc;
 	double c=(b-a)/2.0;
+	double S;
 	fa=f(a);
 	fb=f(b);
 	fc=f(c);
-	// Sab=Simpson(a,b,f);
-	// Sac=Simpson(a,c,f);
-	// Scb=Simpson(c,b,f);
+	S = (c/6)*(fa + 4*fc + fb);  
 
-	return SimpsonPlusEvalf(a,b,Sac,fa,fb,fc,f,tol);
+	return SimpsonPlusEvalf(a,b,Simpson(a,b,f),fa,fb,fc,f,tol);
 }
 
 
