@@ -3,7 +3,7 @@
 #include <math.h>
 
 #include <time.h>
-#define DEBUG //uncomment this line if you want to see the computing proccess
+//#define DEBUG //uncomment this line if you want to see the computing proccess
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -32,25 +32,32 @@ double AdaptativeEuler(double t0, double y0, double h0, double t1, double (*f) (
 		
 		if(t+h>t1)
 		{
-				printf("t %lf will pass t1 %lf with h %lf\n",t,t1,h);
-				h=t1-t;
-				printf("new h %lf\n",h);
 				#ifdef DEBUG
-				sleep(1);
+				printf("t %lf will pass t1 %lf with h %lf\n",t,t1,h);
+				#endif
+				h=t1-t;
+				#ifdef DEBUG
+				printf("new h %lf\n",h);
 				#endif
 		}
 		else
 		{	
 			if(error<emax) //error is tolerable
 			{
+				#ifdef DEBUG
 				printf("step h %lf accepted y: %lf",h,y);
+				#endif
 				t+=h; //accept step
 				y=y2; //accept step value
+				#ifdef DEBUG
 				printf(" becoming y %lf and t %lf\n",y,t);
+				#endif
 			}
 			else
 			{
+				#ifdef DEBUG
 				printf("error %lf greater tham emax %lf\n",error,emax);
+				#endif
 			}
 
 			hNew=h*sqrt(emax/error);
@@ -59,7 +66,9 @@ double AdaptativeEuler(double t0, double y0, double h0, double t1, double (*f) (
 				hNew = 1.2*h;
 			}
 			h=hNew;
+			#ifdef DEBUG
 			printf("h is now %lf\n",h);
+			#endif
 
 		}
 		
@@ -104,41 +113,7 @@ double FunctionRight(double t)
 	return exp(t*t/2.0)-t*t-2;
 }
 
-double Lagrange (const int n,double* X, double* Y, double x)
-{
-	double* L;
-	int i,j;
-	double result;
 
-	L=(double*)malloc(sizeof(double)*n);
-	for(i=0;i<n;i++)
-	{
-		L[i]=1;
-		for(j=0;j<n;j++)
-		{
-			if(j!=i) // there's no (x-X[j])/(X[j]-X[j])
-			{
-				L[i]*=(x-X[j])/(X[i]-X[j]);
-			}
-		}
-	}	
-	result=0.0;
-	for(i=0;i<n;i++)
-	{
-		result+=(Y[i]*L[i]);
-	}	
-
-	return result;
-}
-double FunctionDerivativeB(double y)
-{
-	double Amostras[] ={0,0.18,0.32,0.45,0.67,0.97,1.17};
-	double X[] ={0,1,2,3,4,5,6,7};
-	double g=9.81;
-	double d =0.5;
-	double e =2.0;
-	return M_PI*d*d * sqrt(2*g*(y+e)) /(4.0 * Lagrange(7,X,Amostras,y)) ;
-}
 int main (void)
 {
 	double error,rError;
@@ -156,7 +131,7 @@ int main (void)
 	printf("r %lf vs y %lf relative error : %lf  absolute error %lf\n",r,y,rError,error);
 	r=TimeToY1(t0,y0,y,h0,FunctionDerivative);
 	printf("r %lf vs t %lf absolute error %lf\n",r,t,fabs(r-t));
-	
+
 
 	return 0;
 
