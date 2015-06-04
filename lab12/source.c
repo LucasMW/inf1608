@@ -1,13 +1,19 @@
-#include<stdio.h>
-#include<stdlib.h>
-
-#define DEBUG //uncomment this line with want to see the computing proccess
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+//#define DEBUG //uncomment this line with want to see the computing proccess
 
 static void MCopy(double * org, double* dest,int n)
 {
 	int i,n2;
 	n2=n*n;
 	for(i=0;i<n2;i++)
+		dest[i]=org[i];
+}
+static void VCopy(double * org, double* dest,int n)
+{
+	int i;
+	for(i=0;i<n;i++)
 		dest[i]=org[i];
 }
 int MIndex(int i, int j,int n)
@@ -43,12 +49,12 @@ int checkEDD(double* A, int n)
 	for(i=0;i<n;i++)
 	{
 		double soma=0;
-		for(j=0;j<n;i++)
+		for(j=0;j<n;j++)
 		{
 			if(i!=j)
 				soma+=A[MIndex(i,j,n)];
 		}
-		if(A[MIndex(i,j,n)]<soma)
+		if(fabs(A[MIndex(i,i,n)])<fabs(soma)) //Not Dominant
 		{
 			return 0;
 		}
@@ -64,20 +70,35 @@ void Jacobi (int n , double* A, double* b, double* x, int niter)
 	int i,j;
 	int k; //count iterations
 	double s;
+
+	if(!checkEDD(A,n))
+	{
+		printf("Not Diagonal Dominant\nExiting\n");
+		return;
+	}
 	for(k=0;k<niter;k++)
 	{
-	for(i=0;i<n;i++)
-	{
-		s=0;
-		for(j=0;j<n;j++)
+		for(i=0;i<n;i++)
 		{
-			if(i!=j)
+			s=0;
+			for(j=0;j<n;j++)
 			{
-				s+=A[MIndex(i,j,n)]*x[j];
+				if(i!=j)
+				{
+					s+=A[MIndex(i,j,n)]*x[j];
+					#ifdef DEBUG
+					//MPrint(A,n);
+					printf("i %d j %d  k %d s %lf\n",i,j,k,s);
+					#endif
+				}
 			}
+			x[i]=(b[i]-s)/A[MIndex(i,i,n)];
+
 		}
-		x[i]=(b[i]-s)/A[MIndex(i,j,n)];
-	}
+		#ifdef DEBUG
+		sleep(1);
+		 VPrint(x,n);
+		#endif
 	}
 
 	/*for(i=0;i<n;i++)
@@ -92,6 +113,11 @@ void GaussSeidel (int n, double* A, double* b, double* x, int niter)
 {
 	int i,j,k;
 	double soma;
+	if(!checkEDD(A,n))
+	{
+		printf("Not Diagonal Dominant\nExiting\n");
+		return;
+	}
 	for(k=0; k<niter; k++)
 	{
 		for(i=0;i<n;i++)
@@ -113,6 +139,11 @@ void SOR(int n, double* A, double * b, double* x, int niter, double w)
 {
 	int i,j,k;
 	double s;
+	if(!checkEDD(A,n))
+	{
+		printf("Not Diagonal Dominant\nExiting\n");
+		return;
+	}
 	for(k=0;k<niter;k++)
 	{
 		for(i=0;i<niter;i++)
@@ -141,6 +172,7 @@ int main (void)
 	double b1[]= {2.5,1.5,1.0,1.0,1.5,2.5};
 	double n1=6;
 	double x1[] ={0.0,0.0,0.0,0.0,0.0,0.0};
+	double xr1[6];
 	double M2[]=
 	{
 		1.0,	2.0,	-1.0,
@@ -148,14 +180,30 @@ int main (void)
 		-3.0,	1.0,	1.0
 	};
 	double b2[]= {3.0,3.0,-6.0}; 
-	double n2=6;
+	double n2=3;
 	double x2[]= {0.0,0.0,0.0};
+	double xr2[3];
+	MPrint(M1,n1);
 	Jacobi(n1,M1,b1,x1,5);
 	VPrint(x1,n1);
+	VCopy(x1,xr1,n1);
 	GaussSeidel(n1,M1,b1,x1,5);
 	VPrint(x1,n1);
+	VCopy(x1,xr1,n1);
 	SOR(n1,M1,b1,x1,5,1.2);
 	VPrint(x1,n1);
+	VCopy(x1,xr1,n1);
+
+	MPrint(M2,n2);
+	Jacobi(n2,M2,b2,x2,5);
+	VPrint(x2,n2);
+	VCopy(x2,xr2,n2);
+	GaussSeidel(n2,M2,b2,x2,5);
+	VPrint(x2,n2);
+	VCopy(x2,xr2,n2);
+	SOR(n2,M2,b2,x2,5,1.2);
+	VPrint(x2,n2);
+	VCopy(x2,xr2,n2);
 
 	return 0;
 }
