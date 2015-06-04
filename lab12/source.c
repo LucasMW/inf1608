@@ -96,7 +96,7 @@ void Jacobi (int n , double* A, double* b, double* x, int niter)
 
 		}
 		#ifdef DEBUG
-		sleep(1);
+		//sleep(1);
 		 VPrint(x,n);
 		#endif
 	}
@@ -146,16 +146,23 @@ void SOR(int n, double* A, double * b, double* x, int niter, double w)
 	}
 	for(k=0;k<niter;k++)
 	{
-		for(i=0;i<niter;i++)
+		for(i=0;i<n;i++)
 		{
 			s=0;
 			for(j=0;j<n;j++)
 			{
 				if(j!=i)
 					s+=A[MIndex(i,j,n)]*x[j];
+				#ifdef DEBUG
+					printf("i %d j %d  k %d s %lf\n",i,j,k,s);
+					#endif
 			}
 			x[i]+=w*((b[i]-s)/A[MIndex(i,i,n)]-x[i]);
 		}
+		#ifdef DEBUG
+		sleep(1);
+		 VPrint(x,n);
+		#endif
 	}
 }
 int main (void)
