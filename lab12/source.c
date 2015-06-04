@@ -183,25 +183,26 @@ int main (void)
 	double n2=3;
 	double x2[]= {0.0,0.0,0.0};
 	double xr2[3];
+	int steps= 5;
 	MPrint(M1,n1);
-	Jacobi(n1,M1,b1,x1,5);
+	Jacobi(n1,M1,b1,x1,steps);
 	VPrint(x1,n1);
 	VCopy(x1,xr1,n1);
-	GaussSeidel(n1,M1,b1,x1,5);
+	GaussSeidel(n1,M1,b1,x1,steps);
 	VPrint(x1,n1);
 	VCopy(x1,xr1,n1);
-	SOR(n1,M1,b1,x1,5,1.2);
+	SOR(n1,M1,b1,x1,steps,1.2);
 	VPrint(x1,n1);
 	VCopy(x1,xr1,n1);
 
 	MPrint(M2,n2);
-	Jacobi(n2,M2,b2,x2,5);
+	Jacobi(n2,M2,b2,x2,steps);
 	VPrint(x2,n2);
 	VCopy(x2,xr2,n2);
-	GaussSeidel(n2,M2,b2,x2,5);
+	GaussSeidel(n2,M2,b2,x2,steps);
 	VPrint(x2,n2);
 	VCopy(x2,xr2,n2);
-	SOR(n2,M2,b2,x2,5,1.2);
+	SOR(n2,M2,b2,x2,steps,1.2);
 	VPrint(x2,n2);
 	VCopy(x2,xr2,n2);
 
