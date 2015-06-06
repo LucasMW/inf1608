@@ -87,7 +87,6 @@ void Jacobi (int n , double* A, double* b, double* x, int niter)
 				{
 					s+=A[MIndex(i,j,n)]*x[j];
 					#ifdef DEBUG
-					//MPrint(A,n);
 					printf("i %d j %d  k %d s %lf\n",i,j,k,s);
 					#endif
 				}
@@ -96,17 +95,11 @@ void Jacobi (int n , double* A, double* b, double* x, int niter)
 
 		}
 		#ifdef DEBUG
-		//sleep(1);
 		 VPrint(x,n);
 		#endif
 	}
 
-	/*for(i=0;i<n;i++)
-		for(j=0;j<n;j++)
-			if(i<j) //superior
-				U[MIndex(i,j,n)]=A[MIndex(i,j,n)];
-			else if(i>j) //inferiro
-				L[MIndex(i,j,n)]=A[MIndex(i,j,n)];*/
+
 
 }
 void GaussSeidel (int n, double* A, double* b, double* x, int niter)
@@ -160,7 +153,6 @@ void SOR(int n, double* A, double * b, double* x, int niter, double w)
 			x[i]+=w*((b[i]-s)/A[MIndex(i,i,n)]-x[i]);
 		}
 		#ifdef DEBUG
-		sleep(1);
 		 VPrint(x,n);
 		#endif
 	}
