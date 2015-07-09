@@ -98,7 +98,7 @@ double AdaptativeRungeKutta(double t0, double y0, double w0, double h0, double t
 		}
 		else
 		{	
-			if(error<emax) //error is tolerable
+			if(error<=emax) //error is tolerable
 			{
 				#ifdef DEBUG
 				printf("step h %lf accepted y: %lf",h,y);
