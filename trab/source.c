@@ -45,41 +45,43 @@ double AdaptativeRungeKutta(double t0, double y0, double w0, double h0, double t
 	double y,y1,y2;
 	double s1,s2,s3,s4;
 	double k1,k2,k3,k4;
-	double w,w1,w2;
+	double w,w1,w2,w3,w4;
 	double t;
 	double fty;
 	double h,hNew;
 	double error;
 	//t1=t1+h/2.0; //interval security
+	w=w0;
 	for(t=t0,y=y0,h=h0;t<t1;)
 	{
 		//control eval
-		k1=h*f(t,y);
-		k2=h*f(t+h/2,y+k1/2.0);
-		k3=h*f(t+h/2,y+k2/2.0);
-		k4=h*f(t+h,y+k3);
-		w1 = w + (k1+2*(k2+k3)+k4)/6.0;
+		w1 = calculateW(t,y,h,w,f);
+		w2 = calculateW(t+h/2,y,h,w,f);
 
-
-		s1=h*f(t,w1);
-		s2=h*f(t+h/2,w+s1/2.0);
-		s3=h*f(t+h/2,w+s2/2.0);
-		s4=h*f(t+h,w+s3);
+		s1=h*w1;
+		s2=h*w2;
+		s3=h*w2;
+		s4=h*w1;
 		y1 = y + (s1+2*(s2+s3)+s4)/6.0;
 
 
 
 		//test eval
-		s1=h*f(t,y);
-		s2=h*f(t+h/4,y+s1/2.0);
-		s3=h*f(t+h/4,y+s2/2.0);
-		s4=h*f(t+h/2,y+s3);
+
+		w1 = calculateW(t,y,h,w,f);
+		w2 = calculateW(t+h/4,y,h,w,f);
+
+
+		s1=h*w1;
+		s2=h*calculateW(t+h/4,y+s1/2.0,h,w,f);
+		s3=h*calculateW(t+h/4,y+s2/2.0,h,w,f);
+		s4=h*calculateW(t+h/2,y+s3,h,w,f);
 		y2 = y + (s1+2*(s2+s3)+s4)/6.0;
 
-		s1=h*f(t,y2);
-		s2=h*f(t+h/4,y2+s1/2.0);
-		s3=h*f(t+h/4,y2+s2/2.0);
-		s4=h*f(t+h/2,y2+s3);
+		s1=h*calculateW(t,y2,h,w,f);
+		s2=h*calculateW(t+h/4,y2+s1/2.0,h,w,f);
+		s3=h*calculateW(t+h/4,y2+s2/2.0,h,w,f);
+		s4=h*calculateW(t+h/2,y+s3,h,w,f);
 		y2 = y2 + (s1+2*(s2+s3)+s4)/6.0;
 		//step error
 		error=fabs(y2-y1);
@@ -101,6 +103,7 @@ double AdaptativeRungeKutta(double t0, double y0, double w0, double h0, double t
 				#ifdef DEBUG
 				printf("step h %lf accepted y: %lf",h,y);
 				#endif
+				w = w1; //save last vellocity
 				t+=h; //accept step
 				y=y2; //accept step value
 				#ifdef DEBUG
@@ -114,7 +117,7 @@ double AdaptativeRungeKutta(double t0, double y0, double w0, double h0, double t
 				#endif
 			}
 
-			hNew=h*pow(emax/error,-5); //5th root  
+			hNew=h * sqrt(emax/error);//5th root  
 			if(hNew > 1.2*h)
 			{
 				hNew = 1.2*h;
@@ -175,9 +178,9 @@ int main (void)
 	double T = 2 * M_PI * sqrt(L /G);
 	double t;
 	double w;
-	for(t=0;t<T;t += 0.01)
+	for(t=0;t<T;t += 0.1)
 	{
-		printf("theta(%lf): %lf VS %lf\n",t,FunctionRight(t,theta0),VerletIntegration(0,t,theta0,0,FunctionSecondDerivative));
+		printf("theta(%lf): %lf VS %lf VS %lf\n",t,FunctionRight(t,theta0),VerletIntegration(0,t,theta0,0,FunctionSecondDerivative),AdaptativeRungeKutta(0,theta0,0,0.01,t,FunctionSecondDerivative,pow(10,-5)));
 
 	}
 	
