@@ -14,7 +14,7 @@ double VerletIntegration(double t0,double t1,double y0,double v0,double (*f) (do
 {
 	double yAnt, y, yNext;
 	double h, t;
-	h=(t1-t0)/10;
+	h=(t1-t0)/1000;
 	//initialization
 	yAnt = y0;
 	y= yAnt + h*v0;
@@ -23,7 +23,6 @@ double VerletIntegration(double t0,double t1,double y0,double v0,double (*f) (do
 	for(t=t0;t<t1;t+=h)
 	{
 		yNext= y + (y - yAnt) + f(t,y) * h *h;
-
 		yAnt= y;
 		y = yNext;
 	}
@@ -58,10 +57,10 @@ double AdaptativeRungeKutta(double t0, double y0, double w0, double h0, double t
 		w1 = calculateW(t,y,h,w,f);
 		w2 = calculateW(t+h/2,y,h,w,f);
 
-		s1=h*w1;
-		s2=h*w2;
-		s3=h*w2;
-		s4=h*w1;
+		s1=h*calculateW(t,y,h,w,f);;
+		s2=h*calculateW(t+h/2,y+s1,h,w,f);;
+		s3=h*calculateW(t+h/2,y+s2,h,w,f);;
+		s4=h*calculateW(t,y+s3,h,w,f);;
 		y1 = y + (s1+2*(s2+s3)+s4)/6.0;
 
 
@@ -117,7 +116,7 @@ double AdaptativeRungeKutta(double t0, double y0, double w0, double h0, double t
 				#endif
 			}
 
-			hNew=h * sqrt(emax/error);//5th root  
+			hNew=h *sqrt(emax/error);//5th root  
 			if(hNew > 1.2*h)
 			{
 				hNew = 1.2*h;
@@ -169,20 +168,55 @@ double Function(double t, double theta)
 }
 double FunctionRight(double t,double theta0)
 {
-	return theta0 * cos(sqrt(G/L * t));
+	return theta0 * cos(sqrt(G/L)* t);
 }
+void Thetacoordinates(double t0,double tf,double h,double theta0)
+{
+	double t;
+	for(t=t0;t<tf;t += h)
+	{
+		printf("(%lf,%lf)",t,FunctionRight(t,theta0));
+	}
+
+}
+void Verletcoordinates(double t0,double tf,double h,double theta0)
+{
+	double t;
+	for(t=t0;t<tf;t += h)
+	{
+		printf("(%lf,%lf)",t,VerletIntegration(0,t,theta0,0,FunctionSecondDerivative));
+	}
+
+}
+void RungeKuttaCoordinates(double t0,double tf,double h,double theta0)
+{
+	double t;
+	for(t=t0;t<tf;t += h)
+	{
+		printf("(%lf,%lf)",t,AdaptativeRungeKutta(t0,theta0,0,h/10.0,t,FunctionSecondDerivative,pow(10,-5)));
+
+	}
+}
+
 int main (void)
 {
 	double theta;
-	double theta0= M_PI/30;
-	double T = 2 * M_PI * sqrt(L /G);
+	double theta0= M_PI/2;
+	double T = 2 * M_PI * sqrt(L /G) *2;
 	double t;
 	double w;
-	for(t=0;t<T;t += 0.1)
-	{
-		printf("theta(%lf): %lf VS %lf VS %lf\n",t,FunctionRight(t,theta0),VerletIntegration(0,t,theta0,0,FunctionSecondDerivative),AdaptativeRungeKutta(0,theta0,0,0.01,t,FunctionSecondDerivative,pow(10,-5)));
+	// for(t=0;t<T;t += 0.1)
+	// {
+	// 	printf("theta(%lf): %lf VS %lf VS %lf\n",t,FunctionRight(t,theta0),VerletIntegration(0,t,theta0,0,FunctionSecondDerivative),AdaptativeRungeKutta(0,theta0,0,0.01,t,FunctionSecondDerivative,pow(10,-5)));
 
-	}
+	// }
+	printf("Theta Linerized\n");
+	Thetacoordinates(0,T,0.001,theta0);
+	printf("\nVerletcoordinates\n");
+	Verletcoordinates(0,T,0.001,theta0);
+	printf("\nRunge-Kutta\n");
+	RungeKuttaCoordinates(0,T,0.1,theta0);
+	printf("\n");
 	
 	
 	return 0;
