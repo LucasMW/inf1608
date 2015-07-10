@@ -60,7 +60,7 @@ double AdaptativeRungeKutta(double t0, double y0, double w0, double h0, double t
 		s1=h*calculateW(t,y,h,w,f);;
 		s2=h*calculateW(t+h/2,y+s1,h,w,f);;
 		s3=h*calculateW(t+h/2,y+s2,h,w,f);;
-		s4=h*calculateW(t,y+s3,h,w,f);;
+		s4=h*calculateW(t+h,y+s3,h,w,f);;
 		y1 = y + (s1+2*(s2+s3)+s4)/6.0;
 
 
@@ -191,9 +191,10 @@ void Verletcoordinates(double t0,double tf,double h,double theta0)
 void RungeKuttaCoordinates(double t0,double tf,double h,double theta0)
 {
 	double t;
+	double lRunge = 0;
 	for(t=t0;t<tf;t += h)
 	{
-		printf("(%lf,%lf)",t,AdaptativeRungeKutta(t0,theta0,0,h/10.0,t,FunctionSecondDerivative,pow(10,-5)));
+		printf("(%lf,%lf)",t,lRunge=AdaptativeRungeKutta(t,theta0,lRunge,h/10.0,t,FunctionSecondDerivative,pow(10,-5)));
 
 	}
 }
@@ -201,8 +202,8 @@ void RungeKuttaCoordinates(double t0,double tf,double h,double theta0)
 int main (void)
 {
 	double theta;
-	double theta0= M_PI/2;
-	double T = 2 * M_PI * sqrt(L /G) *2;
+	double theta0= M_PI/30;
+	double T = 2 * M_PI * sqrt(L /G) ;
 	double t;
 	double w;
 	// for(t=0;t<T;t += 0.1)
@@ -211,11 +212,11 @@ int main (void)
 
 	// }
 	printf("Theta Linerized\n");
-	Thetacoordinates(0,T,0.001,theta0);
+	Thetacoordinates(0,T,0.01,theta0);
 	printf("\nVerletcoordinates\n");
-	Verletcoordinates(0,T,0.001,theta0);
+	Verletcoordinates(0,T,0.01,theta0);
 	printf("\nRunge-Kutta\n");
-	RungeKuttaCoordinates(0,T,0.1,theta0);
+	//RungeKuttaCoordinates(0,T,0.001,theta0);
 	printf("\n");
 	
 	
