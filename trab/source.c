@@ -191,11 +191,10 @@ void Verletcoordinates(double t0,double tf,double h,double theta0)
 void RungeKuttaCoordinates(double t0,double tf,double h,double theta0)
 {
 	double t;
-	double lRunge = 0;
+	
 	for(t=t0;t<tf;t += h)
 	{
-		printf("(%lf,%lf)",t,lRunge=AdaptativeRungeKutta(t,theta0,lRunge,h/10.0,t,FunctionSecondDerivative,pow(10,-5)));
-
+		printf("(%lf,%lf)",t,AdaptativeRungeKutta(0,theta0,t,h/10.0,t,FunctionSecondDerivative,pow(10,-5)));
 	}
 }
 
@@ -216,7 +215,7 @@ int main (void)
 	printf("\nVerletcoordinates\n");
 	Verletcoordinates(0,T,0.01,theta0);
 	printf("\nRunge-Kutta\n");
-	//RungeKuttaCoordinates(0,T,0.001,theta0);
+	//RungeKuttaCoordinates(0,T,0.1,theta0);
 	printf("\n");
 	
 	
